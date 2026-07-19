@@ -1,6 +1,7 @@
-.---.          Aahneique@github
-      /     \         -------------------
-      \_昼_/          OS: ....................  macOS Tahoe / Windows 11
+```
+       .---.          Aahneique@github
+      /     \         ----------------
+      \_昼_/          OS: .................... macOS Tahoe / Windows 11
       |   |           Uptime: ................ <!--START_UPTIME-->22 years, 5 months<!--END_UPTIME-->
        \_/            Host: .................. MacBook Pro / HP Victus
       // \\           Kernel: ................ Human OS v2.0
@@ -16,10 +17,10 @@
                       - Contact
                       Email.Personal: ........ aahniek@gmail.com
                       Email.Work: ............ -
-                      LinkedIn: .............. [linkedin.com/in/yourprofile](https://www.linkedin.com/in/aahneique-aayushman-4531601a7/)
+                      LinkedIn: .............. [linkedin.com/in/aahneique](https://linkedin.com/in/aahneique)
                       Discord: ............... @aahneique
                       
                       - GitHub Stats
-                      Repos: ................. <!--START_REPOS-->45<!--END_REPOS--> (Contributed: <!--START_CONTRIB-->12<!--END_CONTRIB-->) |     Stars: <!--START_STARS-->128<!--END_STARS-->
+                      Repos: ................. <!--START_REPOS-->45<!--END_REPOS--> (Contributed: <!--START_CONTRIB-->12<!--END_CONTRIB-->) | Stars: <!--START_STARS-->128<!--END_STARS-->
                       Commits: ............... <!--START_COMMITS-->2,415<!--END_COMMITS--> | Followers: <!--START_FOLLOWERS-->84<!--END_FOLLOWERS-->
                       Lines of Code: ......... 120,450
