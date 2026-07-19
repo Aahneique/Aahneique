@@ -1,8 +1,8 @@
-```
+```yaml
        .---.          Aahneique@github
       /     \         ----------------
       \_昼_/          OS: .................... macOS Tahoe / Windows 11
-      |   |           Uptime: ................ <!--START_UPTIME-->22 years, 5 months<!--END_UPTIME-->
+      |   |           Uptime: ................ 22 years, 5 months
        \_/            Host: .................. MacBook Pro / HP Victus
       // \\           Kernel: ................ Human OS v2.0
      //   \\          IDE: ................... VS Code / Anti Gravity IDE / Visual Studio 2026
@@ -21,6 +21,6 @@
                       Discord: ............... @aahneique
                       
                       - GitHub Stats
-                      Repos: ................. <!--START_REPOS-->45<!--END_REPOS--> (Contributed: <!--START_CONTRIB-->12<!--END_CONTRIB-->) | Stars: <!--START_STARS-->128<!--END_STARS-->
-                      Commits: ............... <!--START_COMMITS-->2,415<!--END_COMMITS--> | Followers: <!--START_FOLLOWERS-->84<!--END_FOLLOWERS-->
+                      Repos: ................. 45 (Contributed: 12) | Stars: 128
+                      Commits: ............... 2,415 | Followers: 84
                       Lines of Code: ......... 120,450
