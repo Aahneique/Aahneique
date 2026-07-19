@@ -1,0 +1,131 @@
+name: Update Profile Stats
+
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+jobs:
+  update-readme:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Fetch Stats and Update README
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BIRTHDATE: "2004-07-31"
+        run: |
+          cat << 'EOF' > update_stats.py
+          import os, json, urllib.request, datetime, re
+
+          token = os.getenv("GH_TOKEN")
+          repo = os.getenv("GITHUB_REPOSITORY")
+          username = repo.split("/")[0]
+          birthdate_str = os.getenv("BIRTHDATE")
+
+          headers = {
+              "Authorization": f"Bearer {token}",
+              "Content-Type": "application/json",
+              "User-Agent": "Profile-Updater"
+          }
+
+          def fetch(url, req_headers=headers):
+              req = urllib.request.Request(url, headers=req_headers)
+              with urllib.request.urlopen(req) as response:
+                  return json.loads(response.read().decode())
+
+          def gql_query(query):
+              req = urllib.request.Request("https://api.github.com/graphql", data=json.dumps({"query": query}).encode("utf-8"), headers=headers)
+              with urllib.request.urlopen(req) as response:
+                  return json.loads(response.read().decode())
+
+          # 1. Calculate Uptime (Age)
+          bdate = datetime.datetime.strptime(birthdate_str, "%Y-%m-%d")
+          now = datetime.datetime.now()
+          years = now.year - bdate.year
+          months = now.month - bdate.month
+          if months < 0:
+              years -= 1
+              months += 12
+          uptime = f"{years} years, {months} months"
+
+          # 2. Get Basic Stats (Followers & Repos)
+          user_data = fetch(f"https://api.github.com/users/{username}")
+          followers = user_data.get("followers", 0)
+          repos = user_data.get("public_repos", 0)
+
+          # 3. Get Total Stars (GraphQL)
+          stars_query = """
+          {
+            user(login: "%s") {
+              repositories(first: 100, ownerAffiliations: OWNER, isFork: false) {
+                nodes { stargazerCount }
+              }
+            }
+          }
+          """ % username
+          stars_data = gql_query(stars_query)
+          try:
+              nodes = stars_data["data"]["user"]["repositories"]["nodes"]
+              stars = sum(n["stargazerCount"] for n in nodes)
+          except:
+              stars = 0
+
+          # 4. Get Contributed Repos (GraphQL)
+          contrib_query = """
+          {
+            user(login: "%s") {
+              repositoriesContributedTo(first: 1, contributionTypes: [COMMIT, ISSUE, PULL_REQUEST, REPOSITORY]) {
+                totalCount
+              }
+            }
+          }
+          """ % username
+          contrib_data = gql_query(contrib_query)
+          try:
+              contributed = contrib_data["data"]["user"]["repositoriesContributedTo"]["totalCount"]
+          except:
+              contributed = 0
+
+          # 5. Get Lifetime Commits (REST Search API)
+          try:
+              commits_data = fetch(f"https://api.github.com/search/commits?q=author:{username}", req_headers={**headers, "Accept": "application/vnd.github.cloak-preview+json"})
+              commits = commits_data.get("total_count", 0)
+          except:
+              commits = 0
+
+          # Function to format numbers with commas
+          fmt = lambda n: f"{n:,}"
+
+          # Read the current README
+          with open("README.md", "r") as f:
+              content = f.read()
+
+          # Replace the placeholders using Regex
+          def replace_tag(tag, value, text):
+              return re.sub(rf"(<!--START_{tag}-->).*?(<!--END_{tag}-->)", rf"\g<1>{value}\g<2>", text)
+
+          content = replace_tag("UPTIME", uptime, content)
+          content = replace_tag("REPOS", fmt(repos), content)
+          content = replace_tag("CONTRIB", fmt(contributed), content)
+          content = replace_tag("STARS", fmt(stars), content)
+          content = replace_tag("COMMITS", fmt(commits), content)
+          content = replace_tag("FOLLOWERS", fmt(followers), content)
+
+          # Write changes back
+          with open("README.md", "w") as f:
+              f.write(content)
+          EOF
+          
+          # Execute the generated python script
+          python update_stats.py
+
+      - name: Commit and Push Changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add README.md
+          git diff-index --quiet HEAD || git commit -m "Update profile stats"
+          git push
