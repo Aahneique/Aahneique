@@ -1,6 +1,6 @@
 <table>
 <tr>
-<td valign="top" width="1200">
+<td valign="top" width="1500">
   <img src="https://github.com/Aahneique/Aahneique/blob/main/ghpfp.png?raw=true" width="100%" style="border-radius: 8px;" />
 </td>
 <td valign="top">
