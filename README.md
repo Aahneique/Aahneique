@@ -1,11 +1,11 @@
 <table>
 <tr>
-<td valign="top" width="300">
+<td valign="top" width="400">
   <img src="https://github.com/Aahneique/Aahneique/blob/main/ghpfp.png?raw=true" width="100%" style="border-radius: 8px;" />
 </td>
 <td valign="top">
 
-```yaml
+```make
 Aahneique@github
 ----------------
 OS: .................... macOS Tahoe / Windows 11
