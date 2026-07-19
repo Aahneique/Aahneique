@@ -52,9 +52,13 @@ jobs:
           uptime = f"{years} years, {months} months"
 
           # 2. Get Stats
-          user_data = fetch(f"https://api.github.com/users/{username}")
-          followers = user_data.get("followers", 0)
-          repos = user_data.get("public_repos", 0)
+          try:
+              user_data = fetch(f"https://api.github.com/users/{username}")
+              followers = user_data.get("followers", 0)
+              repos = user_data.get("public_repos", 0)
+          except Exception as e:
+              print(f"Error fetching basic stats: {e}")
+              followers, repos = 0, 0
 
           # 3. Get Stars
           stars_query = """
@@ -66,11 +70,12 @@ jobs:
             }
           }
           """ % username
-          stars_data = gql_query(stars_query)
           try:
+              stars_data = gql_query(stars_query)
               nodes = stars_data["data"]["user"]["repositories"]["nodes"]
               stars = sum(n["stargazerCount"] for n in nodes)
-          except:
+          except Exception as e:
+              print(f"Error fetching stars: {e}")
               stars = 0
 
           # 4. Get Contributed Repos
@@ -83,33 +88,50 @@ jobs:
             }
           }
           """ % username
-          contrib_data = gql_query(contrib_query)
           try:
+              contrib_data = gql_query(contrib_query)
               contributed = contrib_data["data"]["user"]["repositoriesContributedTo"]["totalCount"]
-          except:
+          except Exception as e:
+              print(f"Error fetching contributions: {e}")
               contributed = 0
 
           # 5. Get Lifetime Commits
           try:
               commits_data = fetch(f"https://api.github.com/search/commits?q=author:{username}", req_headers={**headers, "Accept": "application/vnd.github.cloak-preview+json"})
               commits = commits_data.get("total_count", 0)
-          except:
+          except Exception as e:
+              print(f"Error fetching commits: {e}")
               commits = 0
 
           fmt = lambda n: f"{n:,}"
 
           # Read current README
           with open("README.md", "r") as f:
-              content = f.read()
+              lines = f.readlines()
 
-          # Smart replacement targeting the text labels directly instead of HTML tags
-          content = re.sub(r"(Uptime:\s*\.+\s*).*", rf"\g<1>{uptime}", content)
-          content = re.sub(r"(Repos:\s*\.+\s*).*", rf"\g<1>{fmt(repos)} (Contributed: {fmt(contributed)}) | Stars: {fmt(stars)}", content)
-          content = re.sub(r"(Commits:\s*\.+\s*).*", rf"\g<1>{fmt(commits)} | Followers: {fmt(followers)}", content)
+          new_lines = []
+          for line in lines:
+              # Highly flexible matching that preserves your existing dots and spacing structure
+              if "Uptime:" in line:
+                  prefix = line.split("Uptime:")[0] + "Uptime:"
+                  dots = re.search(r"(\s*\.+\s*)", line.split("Uptime:")[1])
+                  dots_str = dots.group(1) if dots else " ................ "
+                  line = f"{prefix}{dots_str}{uptime}\n"
+              elif "Repos:" in line:
+                  prefix = line.split("Repos:")[0] + "Repos:"
+                  dots = re.search(r"(\s*\.+\s*)", line.split("Repos:")[1])
+                  dots_str = dots.group(1) if dots else " ................. "
+                  line = f"{prefix}{dots_str}{fmt(repos)} (Contributed: {fmt(contributed)}) | Stars: {fmt(stars)}\n"
+              elif "Commits:" in line:
+                  prefix = line.split("Commits:")[0] + "Commits:"
+                  dots = re.search(r"(\s*\.+\s*)", line.split("Commits:")[1])
+                  dots_str = dots.group(1) if dots else " ............... "
+                  line = f"{prefix}{dots_str}{fmt(commits)} | Followers: {fmt(followers)}\n"
+              new_lines.append(line)
 
           # Save changes
           with open("README.md", "w") as f:
-              f.write(content)
+              f.writelines(new_lines)
           EOF
           
           python update_stats.py
@@ -120,98 +142,4 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add README.md
           git diff-index --quiet HEAD || git commit -m "Update profile stats smoothly"
-          git push                  return json.loads(response.read().decode())
-
-          def gql_query(query):
-              req = urllib.request.Request("https://api.github.com/graphql", data=json.dumps({"query": query}).encode("utf-8"), headers=headers)
-              with urllib.request.urlopen(req) as response:
-                  return json.loads(response.read().decode())
-
-          # 1. Calculate Uptime (Age)
-          bdate = datetime.datetime.strptime(birthdate_str, "%Y-%m-%d")
-          now = datetime.datetime.now()
-          years = now.year - bdate.year
-          months = now.month - bdate.month
-          if months < 0:
-              years -= 1
-              months += 12
-          uptime = f"{years} years, {months} months"
-
-          # 2. Get Basic Stats (Followers & Repos)
-          user_data = fetch(f"https://api.github.com/users/{username}")
-          followers = user_data.get("followers", 0)
-          repos = user_data.get("public_repos", 0)
-
-          # 3. Get Total Stars (GraphQL)
-          stars_query = """
-          {
-            user(login: "%s") {
-              repositories(first: 100, ownerAffiliations: OWNER, isFork: false) {
-                nodes { stargazerCount }
-              }
-            }
-          }
-          """ % username
-          stars_data = gql_query(stars_query)
-          try:
-              nodes = stars_data["data"]["user"]["repositories"]["nodes"]
-              stars = sum(n["stargazerCount"] for n in nodes)
-          except:
-              stars = 0
-
-          # 4. Get Contributed Repos (GraphQL)
-          contrib_query = """
-          {
-            user(login: "%s") {
-              repositoriesContributedTo(first: 1, contributionTypes: [COMMIT, ISSUE, PULL_REQUEST, REPOSITORY]) {
-                totalCount
-              }
-            }
-          }
-          """ % username
-          contrib_data = gql_query(contrib_query)
-          try:
-              contributed = contrib_data["data"]["user"]["repositoriesContributedTo"]["totalCount"]
-          except:
-              contributed = 0
-
-          # 5. Get Lifetime Commits (REST Search API)
-          try:
-              commits_data = fetch(f"https://api.github.com/search/commits?q=author:{username}", req_headers={**headers, "Accept": "application/vnd.github.cloak-preview+json"})
-              commits = commits_data.get("total_count", 0)
-          except:
-              commits = 0
-
-          # Function to format numbers with commas
-          fmt = lambda n: f"{n:,}"
-
-          # Read the current README
-          with open("README.md", "r") as f:
-              content = f.read()
-
-          # Replace the placeholders using Regex
-          def replace_tag(tag, value, text):
-              return re.sub(rf"(<!--START_{tag}-->).*?(<!--END_{tag}-->)", rf"\g<1>{value}\g<2>", text)
-
-          content = replace_tag("UPTIME", uptime, content)
-          content = replace_tag("REPOS", fmt(repos), content)
-          content = replace_tag("CONTRIB", fmt(contributed), content)
-          content = replace_tag("STARS", fmt(stars), content)
-          content = replace_tag("COMMITS", fmt(commits), content)
-          content = replace_tag("FOLLOWERS", fmt(followers), content)
-
-          # Write changes back
-          with open("README.md", "w") as f:
-              f.write(content)
-          EOF
-          
-          # Execute the generated python script
-          python update_stats.py
-
-      - name: Commit and Push Changes
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add README.md
-          git diff-index --quiet HEAD || git commit -m "Update profile stats"
           git push
