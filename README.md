@@ -1,6 +1,6 @@
 <table>
 <tr>
-<td valign="top" width="500">
+<td valign="top" width="800">
   <img src="https://github.com/Aahneique/Aahneique/blob/main/ghpfp.png?raw=true" width="100%" style="border-radius: 8px;" />
 </td>
 <td valign="top">
@@ -23,8 +23,8 @@ Hobbies.Hardware: ...... Mechanical Keyboards, PC Building
 
 - Contact
 Email.Personal: ........ aahniek@gmail.com
-Email.Work: ............ -
-LinkedIn: .............. [linkedin.com/in/aahneique](https://linkedin.com/in/aahneique)
+Email.Work: ............ 1MS24CS002@msrit.edu
+LinkedIn: .............. linkedin.com/in/aahneique-aayushman-4531601a7
 Discord: ............... @aahneique
 
 - GitHub Stats
