@@ -18,8 +18,8 @@ Languages.Programming: . Java, C, C++, C#, Python, GDScript
 Languages.Computer: .... HTML, CSS, SQL
 Languages.Real: ........ English, Assamese, Hindi
 
-Hobbies.Software: ...... Open Source, Game Dev, Modding
-Hobbies.Hardware: ...... Mechanical Keyboards, PC Building
+Hobbies.Software: ...... Game Dev, 3D Modelling, Asset Creation
+Hobbies.Hardware: ...... Mechanical Keyboards, Cyberdecks, Homelabs
 
 - Contact
 Email.Personal: ........ aahniek@gmail.com
