@@ -5,29 +5,29 @@
 </td>
 <td valign="top">
 
-```coffee
+```yaml
 Aahneique@github
 ----------------
-OS = "macOS Tahoe / Windows 11"
-Uptime = "22 years, 5 months"
-Host = "MacBook Pro / HP Victus"
-Kernel = "Human OS v2.0"
-IDE = "VS Code / Visual Studio 2026"
+OS: .................... macOS Tahoe / Windows 11
+Uptime: ................ 22 years, 5 months
+Host: .................. MacBook Pro / HP Victus
+Kernel: ................ Human OS v2.0
+IDE: ................... VS Code / Visual Studio 2026
 
-Languages_Programming = "Java, C, C++, C#, Python, GDScript"
-Languages_Computer = "HTML, CSS, SQL"
-Languages_Real = "English, Assamese, Hindi"
+Languages.Programming: . Java, C, C++, C#, Python, GDScript
+Languages.Computer: .... HTML, CSS, SQL
+Languages.Real: ........ English, Assamese, Hindi
 
-Hobbies_Software = "Open Source, Game Dev, Modding"
-Hobbies_Hardware = "Mechanical Keyboards, PC Building"
+Hobbies.Software: ...... Open Source, Game Dev, Modding
+Hobbies.Hardware: ...... Mechanical Keyboards, PC Building
 
-# Contact
-Email_Personal = "aahniek@gmail.com"
-Email_Work = "-"
-LinkedIn = "[linkedin.com/in/aahneique](https://linkedin.com/in/aahneique)"
-Discord = "@aahneique"
+- Contact
+Email.Personal: ........ aahniek@gmail.com
+Email.Work: ............ -
+LinkedIn: .............. [linkedin.com/in/aahneique](https://linkedin.com/in/aahneique)
+Discord: ............... @aahneique
 
-# GitHub Stats
-Repos = "45 (Contributed: 12) | Stars: 128"
-Commits = "2,415 | Followers: 84"
-Lines_of_Code = "120,450"
+- GitHub Stats
+Repos: ................. 45 (Contributed: 12) | Stars: 128
+Commits: ............... 2,415 | Followers: 84
+Lines of Code: ......... 120,450
