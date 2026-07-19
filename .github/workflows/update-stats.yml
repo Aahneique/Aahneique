@@ -111,7 +111,6 @@ jobs:
 
           new_lines = []
           for line in lines:
-              # Highly flexible matching that preserves your existing dots and spacing structure
               if "Uptime:" in line:
                   prefix = line.split("Uptime:")[0] + "Uptime:"
                   dots = re.search(r"(\s*\.+\s*)", line.split("Uptime:")[1])
