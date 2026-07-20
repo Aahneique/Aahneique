@@ -29,5 +29,5 @@ Discord: ............... @aahneique
 
 - GitHub Stats
 Repos: ................. 3 (Contributed: 0) | Stars: 1
-Commits: ............... 17 | Followers: 1
+Commits: ............... 22 | Followers: 1
 Lines of Code: ......... 120,450
