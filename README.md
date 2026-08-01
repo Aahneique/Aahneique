@@ -9,7 +9,7 @@
 Aahneique@github
 ----------------
 OS: .................... macOS Tahoe / Windows 11
-Uptime: ................ 22 years, 0 months
+Uptime: ................ 22 years, 1 months
 Host: .................. MacBook Pro / HP Victus
 Kernel: ................ Human OS v2.0
 IDE: ................... VS Code / Visual Studio 2026
