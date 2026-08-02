@@ -28,6 +28,6 @@ LinkedIn: .............. linkedin.com/in/aahneique-aayushman-4531601a7
 Discord: ............... @aahneique
 
 - GitHub Stats
-Repos: ................. 6 (Contributed: 0) | Stars: 5
-Commits: ............... 31 | Followers: 2
+Repos: ................. 7 (Contributed: 0) | Stars: 5
+Commits: ............... 33 | Followers: 2
 Lines of Code: ......... 120,450
